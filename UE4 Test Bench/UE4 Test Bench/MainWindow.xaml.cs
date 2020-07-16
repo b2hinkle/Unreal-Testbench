@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using System.IO;
 
 namespace UE4_Test_Bench
 {
@@ -20,9 +22,32 @@ namespace UE4_Test_Bench
     /// </summary>
     public partial class MainWindow : Window
     {
+        
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void OpenFileBtn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFile();
+        }
+
+        private void OpenFile()
+        {
+            OpenFileDialog FileOpener = new OpenFileDialog()
+            {
+                Title = "Select File",
+                Filter = "uproject file | *.uproject",
+                FileName = " "
+            };
+
+            if (FileOpener.ShowDialog() == true)
+            {
+                FilePathTxtBox.Text = FileOpener.FileName;
+            }
+
         }
     }
 }
