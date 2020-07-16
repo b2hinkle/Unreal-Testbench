@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UE4_Test_Bench"
         mc:Ignorable="d"
         FontSize="20"
-        Title="MainWindow" Height="450" Width="800">
+        Title="UE4 Test Bench" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
@@ -26,5 +26,8 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
+
+        <TextBlock Grid.Column="1" Grid.Row="1" FontSize="36" Text="UE4 Test Bench"/>
+        <TextBlock Grid.Column="1" Grid.Row="2" Text="Game Path"/>
     </Grid>
 </Window>
