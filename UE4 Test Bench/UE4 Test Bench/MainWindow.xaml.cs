@@ -96,7 +96,7 @@ namespace UE4_Test_Bench
                 {
                     CreateNoWindow = true,
                     FileName = EngineFilePathTxtBox.Text,
-                    Arguments = MySettings.Default.ServerArgs,
+                    Arguments = MySettings.Default.ServerArgs
                 };
 
 
@@ -165,7 +165,7 @@ namespace UE4_Test_Bench
 
 
 
-
+        
 
         public static string GetLocalIPAddress()
         {
