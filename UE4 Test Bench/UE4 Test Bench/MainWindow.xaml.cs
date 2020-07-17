@@ -29,6 +29,9 @@ namespace UE4_Test_Bench
         Process ServerProcess;
         List<Process> ClientProcesses = new List<Process>();
 
+        List<string> ServerArgs = new List<string>();
+        List<string> ClientArgs = new List<string>();
+
         string localIP = "";
 
         public MainWindow()
@@ -37,9 +40,31 @@ namespace UE4_Test_Bench
             localIP = GetLocalIPAddress();
             UProjectFilePathTxtBox.Text = MySettings.Default.UProjectFilePath;
             EngineFilePathTxtBox.Text = MySettings.Default.UnrealEngineFilePath;
-            MySettings.Default.ServerArgs = "\"" + MySettings.Default.UProjectFilePath + "\"" + " -server -nosteam";
-            MySettings.Default.ClientArgs = "\"" + MySettings.Default.UProjectFilePath + "\" " + localIP + " -game -ResX=800 -ResY=900 -WinX=0 -WinY=20 -nosteam";
+            SetDefaultServerArgs();
+            SetDefaultClientArgs();
             MySettings.Default.Save();
+        }
+
+        private void SetDefaultServerArgs()
+        {
+            ServerArgs.Clear();
+
+            ServerArgs.Add(MySettings.Default.UProjectFilePath);
+            ServerArgs.Add("-server");
+            ServerArgs.Add("-nosteam");
+        }
+        private void SetDefaultClientArgs()
+        {
+            ClientArgs.Clear();
+
+            ClientArgs.Add(MySettings.Default.UProjectFilePath);
+            ClientArgs.Add(localIP);
+            ClientArgs.Add("-game");
+            ClientArgs.Add("-ResX=800");
+            ClientArgs.Add("-ResY=900");
+            ClientArgs.Add("-WinX=0");
+            ClientArgs.Add("-WinY=20");
+            ClientArgs.Add("-nosteam");
         }
 
         private void OpenUProjectFileBtn_Click(object sender, RoutedEventArgs e)
@@ -57,8 +82,8 @@ namespace UE4_Test_Bench
 
                 MySettings.Default.UProjectFilePath = UProjectFilePathTxtBox.Text;
                 MySettings.Default.Save();
-                MySettings.Default.ServerArgs = "\"" + MySettings.Default.UProjectFilePath + "\"" + " -server -nosteam";
-                MySettings.Default.ClientArgs = "\"" + MySettings.Default.UProjectFilePath + "\" " + localIP + " -game -ResX=800 -ResY=900 -WinX=0 -WinY=20 -nosteam";
+                SetDefaultServerArgs();
+                SetDefaultClientArgs();
             }
         }
         private void OpenEngineFileBtn_Click(object sender, RoutedEventArgs e)
@@ -75,8 +100,8 @@ namespace UE4_Test_Bench
                 EngineFilePathTxtBox.Text = FileOpener.FileName;
                 MySettings.Default.UnrealEngineFilePath = EngineFilePathTxtBox.Text;
                 MySettings.Default.Save();
-                MySettings.Default.ServerArgs = "\"" + MySettings.Default.UProjectFilePath + "\"" + " -server -nosteam";
-                MySettings.Default.ClientArgs = "\"" + MySettings.Default.UProjectFilePath + "\" " + localIP + " -game -ResX=800 -ResY=900 -WinX=0 -WinY=20 -nosteam";
+                SetDefaultServerArgs();
+                SetDefaultClientArgs();
             }
         }
 
@@ -91,14 +116,15 @@ namespace UE4_Test_Bench
                 ServerProcess = new Process();
                 ServerProcess.EnableRaisingEvents = true;
                 ServerProcess.Exited += new EventHandler(ServerProcess_Exited);
-                string g = MySettings.Default.ServerArgs;
                 ServerProcess.StartInfo = new ProcessStartInfo()
                 {
                     CreateNoWindow = true,
-                    FileName = EngineFilePathTxtBox.Text,
-                    Arguments = MySettings.Default.ServerArgs
+                    FileName = EngineFilePathTxtBox.Text
                 };
-
+                foreach (string s in ServerArgs)
+                {
+                    ServerProcess.StartInfo.ArgumentList.Add(s);
+                }
 
                 if (ServerProcess.Start())
                 {
@@ -134,9 +160,12 @@ namespace UE4_Test_Bench
             NewClient.StartInfo = new ProcessStartInfo()
             {
                 CreateNoWindow = true,
-                FileName = EngineFilePathTxtBox.Text,
-                Arguments = MySettings.Default.ClientArgs
+                FileName = EngineFilePathTxtBox.Text
             };
+            foreach (string s in ClientArgs)
+            {
+                NewClient.StartInfo.ArgumentList.Add(s);
+            }
 
             if (NewClient.Start())
             {
