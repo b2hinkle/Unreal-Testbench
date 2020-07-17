@@ -1,4 +1,5 @@
-﻿<Window x:Class="UE4_Test_Bench.MainWindow"
+﻿<Window Closing="OnApplicationEnd"
+        x:Class="UE4_Test_Bench.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -21,17 +22,39 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="60" />
             <RowDefinition Height="*" />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
-
         <TextBlock Grid.Column="1" Grid.Row="1" FontSize="36" Text="UE4 TestBench"/>
-        <TextBlock Grid.Column="1" Grid.Row="2" Text="Game Path"/>
-        <TextBox Name="FilePathTxtBox" Grid.Column="2" Grid.Row="2" Width="400" Text="uproject file path here" Opacity="0.2" />
-        <Button x:Name="OpenFileBtn" Grid.Column="3" Grid.Row="2" Width="30" Click="OpenFileBtn_Click" ToolTip="Select the path to your game">
+        <TextBlock Grid.Column="1" Grid.Row="2" Text="UProject Path"/>
+        <TextBox Name="UProjectFilePathTxtBox" Grid.Column="2" Grid.Row="2" Width="400" Text="UProject file path here" Opacity="0.2" IsEnabled="False" />
+        <Button Name="OpenUProjectFileBtn" Grid.Column="3" Grid.Row="2" Width="30" Click="OpenUProjectFileBtn_Click" ToolTip="Select the path to your game">
             <Image Source="StaticFiles/Pictures/OpenFileIcon.png" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
         </Button>
+        <TextBlock Grid.Column="1" Grid.Row="3" Text="Engine Path"/>
+        <TextBox Name="EngineFilePathTxtBox" Grid.Column="2" Grid.Row="3" Width="400" Text="Engine file path here" Opacity="0.2" IsEnabled="False" />
+        <Button Name="OpenEngineFileBtn" Grid.Column="3" Grid.Row="3" Width="30" ToolTip="Select the path to your game" Click="OpenEngineFileBtn_Click">
+            <Image Source="StaticFiles/Pictures/OpenFileIcon.png" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+        </Button>
+        
+        <Border Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="4" Background="#FF959595"/>
+        
+        <Button Name="StartServer" Grid.Column="1" Grid.Row="6" ToolTip="Starts up the server instance of your game" Click="StartServer_Click" Background="#FFDDDDDD">
+            <Image Source="StaticFiles/Pictures/ServerIcon.png" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+        </Button>
+        <TextBlock Grid.Column="2" Grid.Row="6" Text="Start a server instance" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+        <Button Name="StartClient" Grid.Column="1" Grid.Row="7" ToolTip="Starts up a client instance of your game" Click="StartClient_Click">
+            <DockPanel>
+                <Image Source="StaticFiles/Pictures/ClientIcon.png" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+                <TextBox Name="ClientCountTxt" VerticalAlignment="Center" Text="0" Background="White"/>
+            </DockPanel>
+        </Button>
+        <TextBlock Grid.Column="2" Grid.Row="7" Text="Start a client instance" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        
     </Grid>
 </Window>
