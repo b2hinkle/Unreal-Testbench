@@ -13,5 +13,6 @@ namespace UE4_Test_Bench
     /// </summary>
     public partial class App : Application
     {
+
     }
 }

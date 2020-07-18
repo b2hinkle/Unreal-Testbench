@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>UE4_Test_Bench</RootNamespace>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>UE4Testbench.ico</ApplicationIcon>
+    <StartupObject></StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="StaticFiles\Pictures\ClientIcon.png" />
+    <None Remove="StaticFiles\Pictures\OpenFileIcon.png" />
+    <None Remove="StaticFiles\Pictures\ServerIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="StaticFiles\Pictures\ClientIcon.png" />
+    <Resource Include="StaticFiles\Pictures\OpenFileIcon.png" />
+    <Resource Include="StaticFiles\Pictures\ServerIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="MySettings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MySettings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="MySettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>MySettings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+    
+</Project>
