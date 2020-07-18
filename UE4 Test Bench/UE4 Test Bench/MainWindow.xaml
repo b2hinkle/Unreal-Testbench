@@ -1,4 +1,6 @@
 ﻿<Window Closing="OnApplicationEnd"
+        Left="150"
+        Top="300"
         x:Class="UE4_Test_Bench.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,7 +9,7 @@
         xmlns:local="clr-namespace:UE4_Test_Bench"
         mc:Ignorable="d"
         FontSize="20"
-        Title="UE4 TestBench" Height="450" Width="800">
+        Title="UE4 Multiplayer Testbench" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
@@ -15,7 +17,7 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
@@ -31,30 +33,41 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="1" Grid.Row="1" FontSize="36" Text="UE4 TestBench"/>
         <TextBlock Grid.Column="1" Grid.Row="2" Text="UProject Path"/>
-        <TextBox Name="UProjectFilePathTxtBox" Grid.Column="2" Grid.Row="2" Width="400" Text="UProject file path here" Opacity="0.2" IsEnabled="False" />
-        <Button Name="OpenUProjectFileBtn" Grid.Column="3" Grid.Row="2" Width="30" Click="OpenUProjectFileBtn_Click" ToolTip="Select the path to your game">
+        <TextBox Name="UProjectFilePathTxtBox" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Width="400" HorizontalAlignment="Left" Text="UProject file path here" Opacity="0.2" IsEnabled="False" />
+        <Button Name="OpenUProjectFileBtn" Grid.Column="4" Grid.Row="2" Width="30" HorizontalAlignment="Left" Click="OpenUProjectFileBtn_Click" ToolTip="Select the path to your game">
             <Image Source="StaticFiles/Pictures/OpenFileIcon.png" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
         </Button>
         <TextBlock Grid.Column="1" Grid.Row="3" Text="Engine Path"/>
-        <TextBox Name="EngineFilePathTxtBox" Grid.Column="2" Grid.Row="3" Width="400" Text="Engine file path here" Opacity="0.2" IsEnabled="False" />
-        <Button Name="OpenEngineFileBtn" Grid.Column="3" Grid.Row="3" Width="30" ToolTip="Select the path to your game" Click="OpenEngineFileBtn_Click">
+        <TextBox Name="EngineFilePathTxtBox" Grid.Column="2" Grid.Row="3" Width="400" HorizontalAlignment="Left" Grid.ColumnSpan="2" Text="Engine file path here" Opacity="0.2" IsEnabled="False" />
+        <Button Name="OpenEngineFileBtn" Grid.Column="4" Grid.Row="3" Width="30" HorizontalAlignment="Left" ToolTip="Select the path to your game" Click="OpenEngineFileBtn_Click">
             <Image Source="StaticFiles/Pictures/OpenFileIcon.png" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
         </Button>
-        
+
         <Border Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="4" Background="#FF959595"/>
-        
-        <Button Name="StartServer" Grid.Column="1" Grid.Row="6" ToolTip="Starts up the server instance of your game" Click="StartServer_Click" Background="#FFDDDDDD">
-            <Image Source="StaticFiles/Pictures/ServerIcon.png" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+
+        <Button Name="StartServer" Grid.Column="1" Grid.Row="6" ToolTip="Starts up the server instance of your game" Click="StartServer_Click">
+            <Image Source="StaticFiles/Pictures/ServerIcon.png" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Button>
-        <TextBlock Grid.Column="2" Grid.Row="6" Text="Start a server instance" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+        <TextBlock Name="ServerButtonTextBlock" Grid.Column="2" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Create Server Instance"/>
+        <Button Name="ServerLogButton" Content="-log" FontSize="9" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="6" VerticalAlignment="Top" Height="24" Width="49" Click="ServerLogButton_Click" ToolTip="When used as a switch (-log), opens a separate window to display the contents of the log in real time." Margin="247,23,0,0" Grid.ColumnSpan="2"/>
+        <Button Name="ServerNosteamButton" Content="-nosteam" FontSize="10" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="6" VerticalAlignment="Top" Height="24" Width="49" Click="ServerNosteamButton_Click" Background="#FF9EFF94" ToolTip="Set steamworks to not be used." Grid.ColumnSpan="2" Margin="247,0,0,0"/>
 
         <Button Name="StartClient" Grid.Column="1" Grid.Row="7" ToolTip="Starts up a client instance of your game" Click="StartClient_Click">
             <DockPanel>
                 <Image Source="StaticFiles/Pictures/ClientIcon.png" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
-                <TextBox Name="ClientCountTxt" VerticalAlignment="Center" Text="0" Background="White"/>
+                <TextBox Name="ClientCountTxt" VerticalAlignment="Center" Text="0" Background="White" IsEnabled="False"/>
             </DockPanel>
         </Button>
-        <TextBlock Grid.Column="2" Grid.Row="7" Text="Start a client instance" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        
+
+        <TextBlock Grid.Column="2" Grid.Row="7" Text="Create a Client Instance" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Button Name="ClientLogButton" Content="-log" FontSize="9" Grid.Column="3" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Top" Height="24" Width="50" Click="ClientLogButton_Click" ToolTip="When used as a switch (-log), opens a separate window to display the contents of the log in real time." Margin="48,23,0,0"/>
+        <Button Name="ClientWindowedButton" Content="-windowed" FontSize="9" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Top" Height="24" Width="50" Click="ClientWindowedButton_Click" Background="#FF9EFF94" ToolTip="Set game to run in windowed mode." Grid.ColumnSpan="2" Margin="247,0,0,0"/>
+        <Button Name="ClientNosteamButton" Content="-nosteam" FontSize="10" Grid.Column="3" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Top" Height="24" Width="50" Click="ClientNosteamButton_Click" Margin="48,0,0,0" Background="#FF9EFF94" ToolTip="Set steamworks to not be used."/>
+        <Button Name="ClientInstalledButton" Content="-installed" FontSize="9" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Top" Height="24" Width="49" Click="ClientInstalledButton_Click" ToolTip="For development purposes, run the game as if installed. (good idea to run log as well so you can see shaders load)" Margin="247,23,0,0" Grid.ColumnSpan="2"/>
+        <Button Name="ClientAutojoinButton" Content="Autojoin" FontSize="10" Grid.Column="3" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Top" Height="24" Width="50" Click="ClientAutoJoinButton_Click" Background="#FF9EFF94" ToolTip="Auto connect the client instance to the server if/when it exists" Margin="103,0,0,0" Grid.ColumnSpan="2"/>
+
+
+        <TextBlock Grid.Column="4" Grid.Row="9" FontSize="11" VerticalAlignment="Bottom" HorizontalAlignment="Right" Text="*All processes close on exit"/>
     </Grid>
 </Window>

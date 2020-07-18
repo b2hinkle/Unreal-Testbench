@@ -32,7 +32,23 @@ namespace UE4_Test_Bench
         List<string> ServerArgs = new List<string>();
         List<string> ClientArgs = new List<string>();
 
+        SolidColorBrush NormalColor = new SolidColorBrush(Color.FromRgb(221, 221, 221));
+        SolidColorBrush EnabledColor = new SolidColorBrush(Color.FromRgb(158, 255, 148));
+        SolidColorBrush ServerRunningColor = new SolidColorBrush(Color.FromRgb(129, 211, 230));
+
         string localIP = "";
+        int clientWinX = 1500;
+        int clientWindowOffset = -20;
+        bool applyClientWindowOffset = true;
+
+        bool serverNosteam = true;
+        bool serverLog = false;
+
+        bool clientAutojoin = true;
+        bool clientLog = false;
+        bool clientWindowed = true;
+        bool clientNosteam = true;
+        bool clientInstalled = false;
 
         public MainWindow()
         {
@@ -40,50 +56,81 @@ namespace UE4_Test_Bench
             localIP = GetLocalIPAddress();
             UProjectFilePathTxtBox.Text = MySettings.Default.UProjectFilePath;
             EngineFilePathTxtBox.Text = MySettings.Default.UnrealEngineFilePath;
-            SetDefaultServerArgs();
-            SetDefaultClientArgs();
+            SetServerArgs();
+            SetClientArgs();
             MySettings.Default.Save();
         }
 
-        private void SetDefaultServerArgs()
+        private void SetServerArgs()
         {
             ServerArgs.Clear();
 
             ServerArgs.Add(MySettings.Default.UProjectFilePath);
             ServerArgs.Add("-server");
-            ServerArgs.Add("-nosteam");
+            if (serverLog)
+            {
+                ServerArgs.Add("-log");
+            }
+            if (serverNosteam)
+            {
+                ServerArgs.Add("-nosteam");
+            }
         }
-        private void SetDefaultClientArgs()
+        private void SetClientArgs()
         {
             ClientArgs.Clear();
 
             ClientArgs.Add(MySettings.Default.UProjectFilePath);
-            ClientArgs.Add(localIP);
+            if (clientAutojoin)
+            {
+                ClientArgs.Add(localIP);
+            }
             ClientArgs.Add("-game");
-            ClientArgs.Add("-ResX=800");
-            ClientArgs.Add("-ResY=900");
-            ClientArgs.Add("-WinX=0");
-            ClientArgs.Add("-WinY=20");
-            ClientArgs.Add("-nosteam");
+            if (clientWindowed)
+            {
+                ClientArgs.Add("-windowed");
+            }
+            if (clientLog)
+            {
+                ClientArgs.Add("-log");
+            }
+            ClientArgs.Add("-ConsoleX=1000");
+            ClientArgs.Add("-ConsoleY=500");
+            if (applyClientWindowOffset)
+            {
+                ClientArgs.Add("-WinX=" + (clientWinX - clientWindowOffset).ToString());
+            }
+            else
+            {
+                ClientArgs.Add("-WinX="+clientWinX.ToString());
+            }
+            ClientArgs.Add("-WinY=190");
+            ClientArgs.Add("-ResX=400");
+            ClientArgs.Add("-ResY=300");
+            if (clientNosteam)
+            {
+                ClientArgs.Add("-nosteam");
+            }
+            if (clientInstalled)
+            {
+                ClientArgs.Add("-installed");
+            }
+            ClientArgs.Add("-NOSPLASH");
         }
-
+        
         private void OpenUProjectFileBtn_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog FileOpener = new OpenFileDialog()
             {
                 Title = "Select File",
-                Filter = "uproject file | *.uproject",
-                FileName = " "
+                Filter = "uproject file | *.uproject"
             };
 
             if (FileOpener.ShowDialog() == true)
             {
                 UProjectFilePathTxtBox.Text = FileOpener.FileName;
-
                 MySettings.Default.UProjectFilePath = UProjectFilePathTxtBox.Text;
                 MySettings.Default.Save();
-                SetDefaultServerArgs();
-                SetDefaultClientArgs();
             }
         }
         private void OpenEngineFileBtn_Click(object sender, RoutedEventArgs e)
@@ -91,8 +138,7 @@ namespace UE4_Test_Bench
             OpenFileDialog FileOpener = new OpenFileDialog()
             {
                 Title = "Select File",
-                Filter = "UnrealEngine | *.exe",
-                FileName = " "
+                Filter = "UnrealEngine | *.exe"
             };
 
             if (FileOpener.ShowDialog() == true)
@@ -100,18 +146,12 @@ namespace UE4_Test_Bench
                 EngineFilePathTxtBox.Text = FileOpener.FileName;
                 MySettings.Default.UnrealEngineFilePath = EngineFilePathTxtBox.Text;
                 MySettings.Default.Save();
-                SetDefaultServerArgs();
-                SetDefaultClientArgs();
             }
         }
-
-
-        /*string serverArgs = *//*"\"" + *//*UProjectFilePathTxtBox.Text*//* + "\""*//* + " -server -log -nosteam";
-        string clientArgs = UProjectFilePathTxtBox.Text + localIP + " -game -ResX=800 -ResY=900 -WinX=0 -WinY=20 -log -nosteam";*/
-
+        
         private void StartServer_Click(object sender, RoutedEventArgs e)
         {
-            if (ServerProcess == null)
+            if (ServerProcess == null)      // Initial creation (first time function is called)
             {
                 ServerProcess = new Process();
                 ServerProcess.EnableRaisingEvents = true;
@@ -121,28 +161,51 @@ namespace UE4_Test_Bench
                     CreateNoWindow = true,
                     FileName = EngineFilePathTxtBox.Text
                 };
-                foreach (string s in ServerArgs)
-                {
-                    ServerProcess.StartInfo.ArgumentList.Add(s);
-                }
+                SetProcessArgumentsForServer();
 
                 if (ServerProcess.Start())
                 {
-                    StartServer.Background = new SolidColorBrush(Color.FromRgb(131, 251, 186));
+                    OnServerInstanceProcessCreated();
+                }
+                return;
+            }
+
+            if (ServerProcess.HasExited)
+            {
+                ServerProcess = new Process();
+                ServerProcess.EnableRaisingEvents = true;
+                ServerProcess.Exited += new EventHandler(ServerProcess_Exited);
+                ServerProcess.StartInfo = new ProcessStartInfo()
+                {
+                    CreateNoWindow = true,
+                    FileName = EngineFilePathTxtBox.Text
+                };
+                SetProcessArgumentsForServer();
+
+                if (ServerProcess.Start())
+                {
+                    OnServerInstanceProcessCreated();
                 }
             }
             else
             {
                 ServerProcess?.Kill();
-                StartServer.Background = new SolidColorBrush(Color.FromRgb(221, 221, 221));
             }
+
+        }
+
+        private void OnServerInstanceProcessCreated()
+        {
+            StartServer.Background = ServerRunningColor;
+            ServerButtonTextBlock.Text = "Kill Server Instance";
         }
 
         private void ServerProcess_Exited(object sender, System.EventArgs e)
         {
             this.Dispatcher.Invoke(() =>
             {
-                StartServer.Background = new SolidColorBrush(Color.FromRgb(221, 221, 221));  // access button from main thread
+                StartServer.Background = NormalColor;  // access button from main thread
+                ServerButtonTextBlock.Text = "Create Server Instance";
             });
             
         }
@@ -162,19 +225,24 @@ namespace UE4_Test_Bench
                 CreateNoWindow = true,
                 FileName = EngineFilePathTxtBox.Text
             };
-            foreach (string s in ClientArgs)
-            {
-                NewClient.StartInfo.ArgumentList.Add(s);
-            }
+            SetProcessArgumentsForClient(NewClient);
 
             if (NewClient.Start())
             {
-                ClientProcesses.Add(NewClient);
-                ClientCountTxt.Text = ClientProcesses.Count().ToString();
-                
+                OnClientInstanceProcessCreated(NewClient);
             }
         }
 
+        private void OnClientInstanceProcessCreated(Process NewClient)
+        {
+            ClientProcesses.Add(NewClient);
+            ClientCountTxt.Text = ClientProcesses.Count().ToString();
+
+            if (applyClientWindowOffset)
+            {
+                clientWinX = clientWinX + clientWindowOffset;
+            }
+        }
         private void ClientProcess_Exited(object sender, System.EventArgs e)
         {
             this.Dispatcher.Invoke(() =>
@@ -188,13 +256,31 @@ namespace UE4_Test_Bench
 
 
 
+        private void SetProcessArgumentsForServer()
+        {
+            SetServerArgs();
+
+            foreach (string s in ServerArgs)
+            {
+                ServerProcess.StartInfo.ArgumentList.Add(s);
+            }
+        }
+        private void SetProcessArgumentsForClient(Process NewClient)
+        {
+            SetClientArgs();
+
+
+            foreach (string s in ClientArgs)
+            {
+                NewClient.StartInfo.ArgumentList.Add(s);
+            }
+        }
 
 
 
 
 
 
-        
 
         public static string GetLocalIPAddress()
         {
@@ -214,10 +300,103 @@ namespace UE4_Test_Bench
                 P.Exited -= new EventHandler(ClientProcess_Exited);
                 P?.Kill();
             }
-            ServerProcess.Exited -= new EventHandler(ServerProcess_Exited);
-            ServerProcess?.Kill();
+            if (ServerProcess != null)
+            {
+                ServerProcess.Exited -= new EventHandler(ServerProcess_Exited);
+                ServerProcess.Kill();
+            }
         }
 
-        
+        private void ServerLogButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (serverLog)
+            {
+                serverLog = false;
+                ServerLogButton.Background = NormalColor;
+            }
+            else
+            {
+                serverLog = true;
+                ServerLogButton.Background = EnabledColor;
+            }
+        }
+        private void ServerNosteamButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (serverNosteam)
+            {
+                serverNosteam = false;
+                ServerNosteamButton.Background = NormalColor;
+            }
+            else
+            {
+                serverNosteam = true;
+                ServerNosteamButton.Background = EnabledColor;
+            }
+        }
+        private void ClientLogButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (clientLog)
+            {
+                clientLog = false;
+                ClientLogButton.Background = NormalColor;
+            }
+            else
+            {
+                clientLog = true;
+                ClientLogButton.Background = EnabledColor;
+            }
+        }
+        private void ClientWindowedButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (clientWindowed)
+            {
+                clientWindowed = false;
+                ClientWindowedButton.Background = NormalColor;
+            }
+            else
+            {
+                clientWindowed = true;
+                ClientWindowedButton.Background = EnabledColor;
+            }
+        }
+        private void ClientNosteamButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (clientNosteam)
+            {
+                clientNosteam = false;
+                ClientNosteamButton.Background = NormalColor;
+            }
+            else
+            {
+                clientNosteam = true;
+                ClientNosteamButton.Background = EnabledColor;
+            }
+        }
+        private void ClientInstalledButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (clientInstalled)
+            {
+                clientInstalled = false;
+                ClientInstalledButton.Background = NormalColor;
+            }
+            else
+            {
+                clientInstalled = true;
+                ClientInstalledButton.Background = EnabledColor;
+            }
+        }
+        private void ClientAutoJoinButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (clientAutojoin)
+            {
+                clientAutojoin = false;
+                ClientAutojoinButton.Background = NormalColor;
+            }
+            else
+            {
+                clientAutojoin = true;
+                ClientAutojoinButton.Background = EnabledColor;
+            }
+        }
     }
 }
