@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>UE4_Test_Bench</RootNamespace>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>MultiplayerTestbench.ico</ApplicationIcon>
+    <ApplicationIcon>UE4Testbench.ico</ApplicationIcon>
     <StartupObject></StartupObject>
   </PropertyGroup>
 

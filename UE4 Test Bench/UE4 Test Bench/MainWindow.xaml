@@ -9,7 +9,7 @@
         xmlns:local="clr-namespace:UE4_Test_Bench"
         mc:Ignorable="d"
         FontSize="20"
-        Title="UE4 Multiplayer Testbench" Height="450" Width="800">
+        Title="UE4 Testbench" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
