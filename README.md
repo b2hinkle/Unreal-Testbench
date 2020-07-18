@@ -1,5 +1,5 @@
 # UE4 Testbench
-![Alt text](Images/rmImg.PNG?raw=true "UE4 Testbench")
+![Alt text](Source/Images/rmImg.PNG?raw=true "UE4 Testbench")
 I always prefer to test game logic outside the editor, especially multiplayer specific logic so I decided to make this quick GUI app. This GUI provides a quick and simple way to test your games outside the editor. It allows you to choose from some common optional parameters before creating a Client/Server instance. Exiting the application will kill all created processes.
 
 ## Multiplayer Testing
