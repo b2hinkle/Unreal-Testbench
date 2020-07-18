@@ -39,7 +39,7 @@
         </Button>
         <TextBlock Grid.Column="1" Grid.Row="3" Text="Engine Path"/>
         <TextBox Name="EngineFilePathTxtBox" Grid.Column="2" Grid.Row="3" Width="400" HorizontalAlignment="Left" Grid.ColumnSpan="2" Text="Engine file path here" Opacity="0.2" IsEnabled="False" />
-        <Button Name="OpenEngineFileBtn" Grid.Column="4" Grid.Row="3" Width="30" HorizontalAlignment="Left" ToolTip="Select the path to your game" Click="OpenEngineFileBtn_Click">
+        <Button Name="OpenEngineFileBtn" Grid.Column="4" Grid.Row="3" Width="30" HorizontalAlignment="Left" ToolTip="Select the path to your UnrealEditor" Click="OpenEngineFileBtn_Click">
             <Image Source="StaticFiles/Pictures/OpenFileIcon.png" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
         </Button>
 
