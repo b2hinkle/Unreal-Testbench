@@ -28,6 +28,7 @@ namespace UE4_Test_Bench
     {
         Process ServerProcess;
         List<Process> ClientProcesses = new List<Process>();
+        int ClientProcessesUserManuallyEnded;
 
         List<string> ServerArgs = new List<string>();
         List<string> ClientArgs = new List<string>();
@@ -238,7 +239,7 @@ namespace UE4_Test_Bench
         private void OnClientInstanceProcessCreated(Process NewClient)
         {
             ClientProcesses.Add(NewClient);
-            ClientCountTxt.Text = ClientProcesses.Count().ToString();
+            ClientCountTxt.Text = (ClientProcesses.Count() - ClientProcessesUserManuallyEnded).ToString();
 
             if (applyClientWindowOffset)
             {
@@ -247,10 +248,12 @@ namespace UE4_Test_Bench
         }
         private void ClientProcess_Exited(object sender, System.EventArgs e)
         {
+            ClientProcessesUserManuallyEnded++;
             this.Dispatcher.Invoke(() =>
             {
-                /*ClientProcesses.Remove(process);*/ // Locate the process object so we can remove it from the list
-                /*ClientCountTxt.Text = (int.Parse(ClientCountTxt.Text) - 1).ToString();*/      //  Client processes count is currently faked when decrementing but shouldn't be innacturate. Quick implementation for now
+                /*ClientProcesses.Remove(process);*/ // Locate the process object so we can remove it from the list. Should implement using this way but will temportarily comment out for a quicker implementation. 
+
+                ClientCountTxt.Text = (ClientProcesses.Count - ClientProcessesUserManuallyEnded).ToString();      //  Client processes count is currently faked when decrementing but shouldn't be innacturate. Quick implementation for now will come back to later
             });
 
         }
@@ -316,6 +319,7 @@ namespace UE4_Test_Bench
             ServerButtonTextBlock.Text = "Create Server Instance";
             ClientCountTxt.Text = ClientProcesses.Count().ToString();
 
+            ClientProcessesUserManuallyEnded = 0;
 
 
         }
