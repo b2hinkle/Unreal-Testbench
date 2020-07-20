@@ -13,12 +13,14 @@
     <None Remove="StaticFiles\Pictures\ClientIcon.png" />
     <None Remove="StaticFiles\Pictures\OpenFileIcon.png" />
     <None Remove="StaticFiles\Pictures\ServerIcon.png" />
+    <None Remove="StaticFiles\Pictures\TrashIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="StaticFiles\Pictures\ClientIcon.png" />
     <Resource Include="StaticFiles\Pictures\OpenFileIcon.png" />
     <Resource Include="StaticFiles\Pictures\ServerIcon.png" />
+    <Resource Include="StaticFiles\Pictures\TrashIcon.png" />
   </ItemGroup>
 
   <ItemGroup>

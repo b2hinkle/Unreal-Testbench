@@ -28,6 +28,8 @@
             <RowDefinition Height="20" />
             <RowDefinition Height="60" />
             <RowDefinition Height="60" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="*" />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
@@ -67,7 +69,13 @@
         <Button Name="ClientInstalledButton" Content="-installed" FontSize="9" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Top" Height="24" Width="49" Click="ClientInstalledButton_Click" ToolTip="For development purposes, run the game as if installed. (good idea to run log as well so you can see shaders load)" Margin="247,23,0,0" Grid.ColumnSpan="2"/>
         <Button Name="ClientAutojoinButton" Content="Autojoin" FontSize="10" Grid.Column="3" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Top" Height="24" Width="50" Click="ClientAutoJoinButton_Click" Background="#FF9EFF94" ToolTip="Auto connect the client instance to the server if/when it exists" Margin="103,0,0,0" Grid.ColumnSpan="2"/>
 
-
-        <TextBlock Grid.Column="4" Grid.Row="9" FontSize="11" VerticalAlignment="Bottom" HorizontalAlignment="Right" Text="*All processes close on exit"/>
+        <TextBlock Grid.Column="2" Grid.Row="9" Text="Kill all" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Button Name="DisposeAll" Grid.Column="1" Grid.Row="9" ToolTip="Kills all instances" Click="DisposeAll_Click" Background="#FFF96161" Height="20" VerticalAlignment="Bottom">
+            <Image Source="StaticFiles/Pictures/TrashIcon.png" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Button>
+        
+        
+        
+        <TextBlock Grid.Column="4" Grid.Row="11" FontSize="11" VerticalAlignment="Bottom" HorizontalAlignment="Right" Text="*All processes close on exit"/>
     </Grid>
 </Window>
