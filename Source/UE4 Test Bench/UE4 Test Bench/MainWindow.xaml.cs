@@ -76,6 +76,7 @@ namespace UE4_Test_Bench
                 ServerArgs.Add("-nosteam");
             }
 
+        
         }
         private void SetClientArgs()
         {
@@ -256,7 +257,6 @@ namespace UE4_Test_Bench
 
 
 
-
         private void SetProcessArgumentsForServer()
         {
             SetServerArgs();
@@ -295,6 +295,10 @@ namespace UE4_Test_Bench
 
         private void OnApplicationEnd(object sender, CancelEventArgs e)
         {
+            KillAllProcesses();
+        }
+        private void KillAllProcesses()
+        {
             // Faster to kill clients first since server won't have to redirect all clients to their own maps before server gets killed
             foreach (Process P in ClientProcesses)
             {
@@ -306,6 +310,14 @@ namespace UE4_Test_Bench
                 ServerProcess.Exited -= new EventHandler(ServerProcess_Exited);
                 ServerProcess.Kill();
             }
+
+            ClientProcesses.Clear();
+            StartServer.Background = NormalColor;
+            ServerButtonTextBlock.Text = "Create Server Instance";
+            ClientCountTxt.Text = ClientProcesses.Count().ToString();
+
+
+
         }
 
         private void ServerLogButton_Click(object sender, RoutedEventArgs e)
@@ -398,6 +410,11 @@ namespace UE4_Test_Bench
                 clientAutojoin = true;
                 ClientAutojoinButton.Background = EnabledColor;
             }
+        }
+
+        private void DisposeAll_Click(object sender, RoutedEventArgs e)
+        {
+            KillAllProcesses();
         }
     }
 }
