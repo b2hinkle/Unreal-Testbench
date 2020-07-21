@@ -11,4 +11,3 @@ Singleplayer games only need to create a client instance to test.
 
 ### Todo:
 Code cleanup/refactoring<br />
-clientCount doesn't decrement when a client process is closed.
