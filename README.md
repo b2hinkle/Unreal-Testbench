@@ -1,6 +1,6 @@
 # UE4 Testbench
 ![Alt text](Source/Images/rmImg.PNG?raw=true "UE4 Testbench")
-I always prefer to test game logic outside the editor, especially multiplayer specific logic so I decided to make this quick GUI app. This GUI provides a quick and simple way to test your games outside the editor. It allows you to choose from some common optional parameters before creating a Client/Server instance. Exiting the application will kill all created processes.
+I always prefer to test game logic outside the editor, especially multiplayer specific logic so I decided to make a GUI app to make things easier. This GUI provides a quick and simple way to test your games outside the editor. It allows you to choose from some common optional parameters before creating a Client/Server instance. Exiting the application will kill all created processes.
 
 ## Multiplayer Testing
 As some developers have noticed before (me included), testing multiplayer within the editor sometimes seems to produces inaccurate results (ie certain RPC events not replicating to certain clients even if we check "reliable"). This GUI is meant to solve this by avoiding in editor testing.
